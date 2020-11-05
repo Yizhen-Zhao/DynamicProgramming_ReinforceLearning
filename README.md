@@ -1,2 +1,2 @@
-# Dynamic-Programming-Reinforce-Learning
-2020 Dynamic Programming &amp; Reinforce Learning in VU 
+# Dynamic Programming and Reinforce Learning 
+## 2020 Dynamic Programming &amp; Reinforce Learning course in VU 
