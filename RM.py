@@ -1,5 +1,7 @@
 import numpy as np
 from math import exp
+import seaborn as sns
+import matplotlib.pyplot as plt
 f = np.array([500,300,200])
 # capacity
 C = 100
@@ -15,20 +17,25 @@ V = np.empty((C+1,T+1,3))
 
 print("===")
 #print(V.shape)
+# optimal policy matrix initialize
+optimal = np.empty((C,T))
 
+#initialize the value in the first state
 for i in range(C+1):
 	for j in range(3):
 		V[i,T,j] = 0
 V[0] = 0
-
+Price_Not_Go_Down = 0
 #for each time level
 for t in reversed(range(T)):
 	#for each capacity level
 	#print(t)s
 	for x in range(1,C+1):
 		#print(x)
+		#print("======== T:",(t+1)," C: ",x," ========")
 		#for each class
 		for j in classes:
+
 			prob_acc = 0
 			prob_rej = 1
 			prob_ini = 0
@@ -49,11 +56,37 @@ for t in reversed(range(T)):
 			# ============ for avoiding price drop : for loop should be range(j,3) ============
 			for k in range(0,3):
 				total_revnue = prob_acc*(f[j]+V[x-1,t+1,k])  + prob_rej*V[x,t+1,k]
-				if (total_revnue > max_revenue):
-					max_revenue = total_revnue
-			V[x,t,j] = max_revenue
+				#print("k:",k," total_revnue:",total_revnue)
+				if Price_Not_Go_Down == 0:
+					if (total_revnue > max_revenue):
+						max_revenue = total_revnue
+						V[x,t,j] = max_revenue
+						#optimal[x-1,t] = k+1
+				if Price_Not_Go_Down == 1:
+					if(total_revnue > max_revenue) and j<=k:
+						max_revenue = total_revnue
+						V[x,t,j] = max_revenue
+						#optimal[x-1,t] = k+1
+			#V[x,t,j] = max_revenue
+			#print("=== j:",j," end =====")
+		ini_max = 0
+		for v in range(3):
+			if V[x,t,v] > ini_max:
+				ini_max = V[x,t,v]
+				optimal[x-1,t] = v+1
+
+
+
+
 
 expected_revenue = np.max(V)
 print(expected_revenue)
 print("==============")
+print(optimal)
+sns.heatmap(optimal)
+plt.show()
+
+
+
+
 
