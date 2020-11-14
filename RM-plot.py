@@ -2,6 +2,9 @@ import numpy as np
 from math import exp
 import seaborn as sns
 import matplotlib.pyplot as plt
+from matplotlib.colors import LinearSegmentedColormap
+sns.set()
+
 f = np.array([500,300,200])
 # capacity
 C = 100
@@ -25,7 +28,7 @@ for i in range(C+1):
 	for j in range(3):
 		V[i,T,j] = 0
 V[0] = 0
-Price_Not_Go_Down = 0
+Price_Not_Go_Down = 1
 #for each time level
 for t in reversed(range(T)):
 	#for each capacity level
@@ -80,7 +83,15 @@ expected_revenue = np.max(V)
 print(expected_revenue)
 print("==============")
 print(optimal)
-sns.heatmap(optimal)
+ax = sns.heatmap(optimal, vmin=1, vmax=3, cmap="RdYlGn", cbar_kws={'label': 'Class'})
+plt.xlabel("time")
+plt.ylabel("capacity")
+
+cbar = ax.collections[0].colorbar
+cbar.set_ticks([1, 2, 3])
+cbar.set_ticklabels(['1', '2', '3'])
+
+
 plt.show()
 
 
